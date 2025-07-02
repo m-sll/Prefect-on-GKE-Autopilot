@@ -1,0 +1,63 @@
+#####################################################################
+# values-prefect-autopilot.yaml  –  Prefect Server on GKE Autopilot
+#####################################################################
+
+
+#####################################################################
+# 1. ServiceAccount – pre-created and bound to Workload Identity
+#####################################################################
+serviceAccount:
+  create: false                   # k8s SA ↔ GSA prefect-sql-client
+
+
+#####################################################################
+# 4. Prefect API & background services
+#####################################################################
+server:
+  basicAuth:
+    enabled: false                       # belt-and-braces auth
+  uiConfig:
+    prefectUiApiUrl: /api
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 4
+    targetCPU: 90
+    targetMemory: 90
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+
+#####################################################################
+# 2. Ingress – GCE External HTTP(S) LB + Google-managed TLS
+#####################################################################
+
+ingress:
+  enabled: true
+  className: gce
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: prefect-tls-cert
+    kubernetes.io/ingress.global-static-ip-name: prefect-static-ip
+    # networking.gke.io/frontend-config: prefect-frontend-config
+  host:
+    hostname: prefect.plusai.is
+    pathType: Prefix
+
+
+#####################################################################
+# 4. Disable bundled Postgres – we use Cloud SQL instead
+#####################################################################
+postgresql:
+  enabled: false    # use Cloud SQL connection string
+  auth:
+    existingSecret: prefect-db-conn
+
+secret:
+  create: false

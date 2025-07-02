@@ -1,0 +1,71 @@
+# Prefect Worker Helm Chart Values
+# This configuration deploys a Prefect Worker on GKE that creates jobs in Cloud Run v2
+
+# Worker configuration
+worker:
+  # API configuration for self-hosted server
+  apiConfig: selfHostedServer
+  
+  # Self-hosted server configuration
+  selfHostedServerApiConfig:
+    # API URL for the Prefect server
+    apiUrl: "http://prefect-server.prefect.svc.cluster.local:4200/api"
+  config:
+    # Work pool name - will be passed from Terraform
+    workPool: "${workPoolName}"
+    
+    # Worker type - cloud-run-v2 for Google Cloud Run v2
+    type: "cloud-run-v2"
+    
+    # Install policy for flow dependencies
+    installPolicy: "never"
+    
+    # Prefetch seconds for flow runs
+    prefetchSeconds: 10
+
+  podAnnotations:
+    autopilot.gke.io/spot: "true"
+
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 1Gi
+      cpu: "1"
+
+  autoscaling:
+    enabled: false
+
+  image:
+    repository: ok8s/prefect-gcp
+    prefectTag: "0.0.1"
+    pullPolicy: IfNotPresent
+
+# Service account configuration
+serviceAccount:
+  # Use existing service account created by Terraform
+  create: false
+  # Annotations for workload identity
+  annotations:
+    iam.gke.io/gcp-service-account: "${gcpServiceAccount}"
+  # Name of the existing service account
+  name: "prefect-worker"
+
+# Resource limits and requests for the worker pod
+
+
+# Extra environment variables
+extraEnvVars:
+  - name: PREFECT_LOGGING_LEVEL
+    value: "INFO"
+  - name: PREFECT_API_REQUEST_TIMEOUT
+    value: "60"
+  - name: GCP_PROJECT_ID
+    value: "${gcpProjectId}"
+  # GCP region for Cloud Run operations  
+  - name: GCP_REGION
+    value: "${gcpRegion}"
+  # Cloud Run service account
+  - name: CLOUD_RUN_SERVICE_ACCOUNT
+    value: "${cloudRunServiceAccount}"
