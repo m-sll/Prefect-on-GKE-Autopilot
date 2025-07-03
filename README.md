@@ -48,3 +48,7 @@ Google Cloud Run is a fully managed serverless compute platform billed purely on
 ### Infra Design Diagram
 ![Infra Design](documents/imgs/infra.png)
 
+
+## Terrafrom Cloud Setup
+
+Document about how to setup tfc for this project -> [here](./documents/01.terraform_cloud_setup.md)
