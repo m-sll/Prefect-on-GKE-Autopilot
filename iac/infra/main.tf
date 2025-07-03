@@ -129,23 +129,13 @@ resource "google_container_cluster" "this" {
   # Logging and monitoring
   logging_config {
     enable_components = [
-      "SYSTEM_COMPONENTS",
-      "WORKLOADS"
+      "SYSTEM_COMPONENTS"
     ]
   }
   
   monitoring_config {
     enable_components = [
-      "SYSTEM_COMPONENTS",
-      "STORAGE",
-      "POD",
-      "DEPLOYMENT",
-      "STATEFULSET",
-      "DAEMONSET",
-      "HPA",
-      "CADVISOR",
-      "KUBELET",
-      "DCGM"
+      "SYSTEM_COMPONENTS"
     ]
     
   }
