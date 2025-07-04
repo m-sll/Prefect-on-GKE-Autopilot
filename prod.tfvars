@@ -9,6 +9,10 @@ region = "us-west1"
 prefect_domain = "prefect.plusai.is"
 gke_auth_ips = []
 prefect_helm_chart_version = "2025.6.26211534"  # Specify the version of the Prefect Helm chart to deploy
+prefect_worker_image = {
+      repository = "ok8s/prefect-gcp"
+      prefectTag = "3.4.7"
+}
 docker_repo_name = "prefect-ok8s"
 cloudflare_api_token = ""
 cloudflare_zone_id=""

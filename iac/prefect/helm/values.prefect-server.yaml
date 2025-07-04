@@ -9,6 +9,10 @@
 serviceAccount:
   create: false                   # k8s SA ↔ GSA prefect-sql-client
 
+global:
+  prefect:
+    image:
+      prefectTag: ${prefectTag}
 
 #####################################################################
 # 4. Prefect API & background services

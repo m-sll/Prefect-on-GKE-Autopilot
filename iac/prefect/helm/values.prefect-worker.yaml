@@ -38,8 +38,8 @@ worker:
     enabled: false
 
   image:
-    repository: ok8s/prefect-gcp
-    prefectTag: "0.0.1"
+    repository: ${prefectWorkerImage.repository}
+    prefectTag: "${prefectWorkerImage.prefectTag}"
     pullPolicy: IfNotPresent
 
 # Service account configuration

@@ -74,6 +74,7 @@ resource "helm_release" "prefect_worker" {
       cloudRunServiceAccount = google_service_account.prefect_worker.email
       environment           = var.env
       namespace             = var.namespace_prefect_server
+      prefectWorkerImage    = var.prefect_worker_image
     })
   ]
 

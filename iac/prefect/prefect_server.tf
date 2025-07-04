@@ -69,7 +69,11 @@ resource "helm_release" "prefect_server" {      # <-- use the inline kube-config
   version    = var.prefect_helm_chart_version
   namespace  = var.namespace_prefect_server
 
-  values = [file("${path.module}/helm/values.prefect-server.yaml")]
+  values = [
+    templatefile("${path.module}/helm/values.prefect-server.yaml", {
+      prefectTag          = var.prefect_server_image_tag
+    })
+  ]
 }
 
 resource "kubernetes_manifest" "prefect_cert" {

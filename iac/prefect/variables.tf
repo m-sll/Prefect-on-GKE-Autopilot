@@ -59,3 +59,22 @@ variable "prefect_helm_chart_version" {
   description = "Version of the Prefect Helm chart to deploy"
   type        = string  
 }
+
+variable "prefect_server_image_tag" {
+  description = "Tag for the Prefect server image"
+  type        = string
+  default     = "3-latest"
+}
+
+variable "prefect_worker_image" {
+  description = "Image configuration for Prefect worker"
+  type = object({
+    repository = string
+    prefectTag = string
+  })
+  default = {
+    repository = "ok8s/prefect-gcp"
+    prefectTag = "3.4.7"
+  }
+  
+}
